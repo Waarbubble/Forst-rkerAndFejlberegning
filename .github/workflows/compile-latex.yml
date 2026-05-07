@@ -1,0 +1,46 @@
+name: Compile LaTeX documents
+
+on:
+  push:
+    paths:
+      - '**.tex'
+      - '.github/workflows/compile-latex.yml'
+  pull_request:
+    paths:
+      - '**.tex'
+      - '.github/workflows/compile-latex.yml'
+
+jobs:
+  compile:
+    name: Build all LaTeX files
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        file:
+          - Opgaver1_readable.tex
+          - Opgaver2_readable.tex
+          - Opgaver3_readable.tex
+          - Opgaver4_readable.tex
+          - Opgaver5_readable.tex
+          - Opgaver6_readable.tex
+          - Opgaver7_readable.tex
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Compile ${{ matrix.file }}
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: ${{ matrix.file }}
+          latexmk_use_lualatex: false
+          latexmk_use_xelatex: false
+          args: -pdf -interaction=nonstopmode -halt-on-error
+
+      - name: Upload compiled PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.file }}-pdf
+          path: "*.pdf"
+          if-no-files-found: error
