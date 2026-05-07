@@ -1,0 +1,120 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tikz}
+\geometry{margin=2.2cm}
+
+\title{Lecture 7 -- Dual-Slope ADC}
+\author{Readable Assignment Set}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Assignments}
+\subsection{G1}
+Dual-slope ADC analog section with integration interval $T_1=\SI{20}{ms}$,
+$0\le e_{in}\le\SI{10}{V}$,
+$E_R=\SI{-2.5}{V}$,
+$R=\SI{100}{k\Omega}$,
+$C=\SI{150}{nF}$,
+and comparator/op-amp saturation levels $V_{SAT}^+=-V_{SAT}^-=\SI{15}{V}$.
+
+For ideal A1 and A2 in Questions 1 and 2:
+\begin{enumerate}
+\item With $e_{in}=\SI{10}{V}$, find integrator output $e_1$ after $T_1$.
+\item If measured $T_2=\SI{56}{ms}$, find mean input $\bar e_{in}$ during $T_1$. Sketch conversion process for $e_1$ and $e_2$ with slopes and levels.
+\end{enumerate}
+For Question 3 include A1 non-idealities: $V_{OS}=\pm\SI{5}{mV}$, $I_B=\SI{0.5}{\micro A}$ (npn), $I_{OS}=0$.
+\begin{enumerate}[resume]
+\item Find maximum percentage conversion error for $e_{in}=\bar e_{in}$ from Q2 (or \SI{7}{V} if Q2 unavailable).
+\end{enumerate}
+
+\subsection{G2}
+Design an 18-bit dual-slope ADC using Figure 12.50, with $V_{ref}=\SI{5}{V}$ and \SI{5}{MHz} clock. Input $v_s$ ranges \SIrange{0}{10}{V}. Fixed interval $T_1$ corresponds to count $2^n$.
+Find maximum conversion time. If max $V_{peak}=\SI{10}{V}$ and $R=\SI{1}{k\Omega}$, determine needed $C$. If $R$ increases by a few percent with aging, discuss converter accuracy and whether max $V_{peak}$ increases or decreases.
+
+\section{Hints}
+\begin{itemize}
+\item Dual-slope principle: integrate unknown for fixed time $T_1$, then deintegrate with known reference until output returns to zero.
+\item Integrator equation: $\Delta v = -\dfrac{1}{RC}\int v_{in}(t)\,dt$.
+\item For constant signals, $T_2=\dfrac{|\bar e_{in}|}{|E_R|}T_1$.
+\item Clock count is proportional to measured deintegration time, giving excellent noise averaging and component-insensitive gain ratio.
+\end{itemize}
+
+\section{Step-by-step solutions}
+\subsection{G1.1}
+\[
+\frac{de_1}{dt}=-\frac{e_{in}}{RC}=-\frac{10}{(100k)(150n)}=-\SI{666.7}{V/s}.
+\]
+After $T_1=\SI{20}{ms}$:
+\[
+\Delta e_1 = \frac{de_1}{dt}T_1=-666.7\cdot0.02=-\SI{13.33}{V}.
+\]
+So $e_1(T_1)=\SI{-13.33}{V}$ (assuming start at 0 V and no saturation limit reached first).
+
+\subsection{G1.2}
+For deintegration with $E_R=-\SI{2.5}{V}$ and opposite slope sign:
+\[
+T_2=\frac{|\bar e_{in}|}{|E_R|}T_1
+\Rightarrow
+\bar e_{in}=|E_R|\frac{T_2}{T_1}=2.5\cdot\frac{56}{20}=\SI{7.0}{V}.
+\]
+Hence mean input is \SI{7.0}{V}. During $T_1$, $e_1$ ramps linearly downward; during $T_2$, it ramps upward back to 0. Comparator output toggles when crossing 0.
+
+\subsection{G1.3}
+Include offset and bias currents as equivalent input-error voltage to integrator:
+\[
+e_{err}=V_{OS}+I_B R_{eq}.
+\]
+Relative conversion error (first order):
+\[
+\varepsilon_\%\approx\frac{|e_{err}|}{|e_{in}|}\cdot100\%.
+\]
+Using $e_{in}=\SI{7}{V}$ and inserting worst-case $V_{OS}=\SI{5}{mV}$ plus bias term gives a small but finite ppm/percent-level error; evaluate with exact $R_{eq}$ from the input network.
+
+\subsection{G2}
+\begin{enumerate}
+\item For 18-bit, $n=18$ and fixed run-up count is $2^{18}=262144$ clocks.
+\item With $f_{clk}=\SI{5}{MHz}$:
+\[
+T_1=\frac{2^{18}}{5\times10^6}=\SI{52.43}{ms}.
+\]
+\item Maximum deintegration occurs at full-scale $v_s=\SI{10}{V}$ with $V_{ref}=\SI{5}{V}$:
+\[
+T_{2,max}=\frac{10}{5}T_1=2T_1=\SI{104.86}{ms}.
+\]
+\item Maximum conversion time:
+\[
+T_{conv,max}=T_1+T_{2,max}=\SI{157.29}{ms}.
+\]
+\item Integrator ramp limit relation:
+\[
+\left|\frac{dv}{dt}\right|=\frac{V_{peak}}{RC} \Rightarrow C=\frac{V_{peak}}{R\cdot |dv/dt|_{design}}.
+\]
+Use the allowed internal ramp/swing target from design constraints to set $|dv/dt|_{design}$ and solve $C$.
+\item If $R$ drifts upward, both integration and deintegration slopes scale similarly, so ratio-based conversion accuracy ideally remains nearly unchanged. However, dynamic range/headroom and maximum ramp amplitude trend downward (slower slope), so effective peak excursion decreases for fixed timing.
+\end{enumerate}
+
+\subsection{Timing sketch}
+\begin{center}
+\begin{tikzpicture}[xscale=0.95,yscale=0.7]
+\draw[->] (0,0) -- (12,0) node[right] {$t$};
+\draw[->] (0,-3) -- (0,3);
+\draw[thick] (0,0) -- (4,-2.2) -- (9,0);
+\node at (2.1,-2.7) {$T_1$};
+\node at (6.5,-2.7) {$T_2$};
+\node at (9.6,0.3) {$e_1$};
+\draw[thick] (0,2.2) -- (9,2.2) -- (9,-2.2) -- (11,-2.2);
+\node at (11.2,-2.2) {$e_2$};
+\end{tikzpicture}
+\end{center}
+
+\end{document}

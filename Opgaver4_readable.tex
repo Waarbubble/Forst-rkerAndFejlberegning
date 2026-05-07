@@ -1,0 +1,135 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\geometry{margin=2.2cm}
+
+\title{Lecture 4 -- Offset and Bias Error Analysis}
+\author{Readable Assignment Set}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Assignments}
+\subsection{D1}
+Find worst-case DC output voltage of the inverting amplifier in Fig. 2.34a for $v_{in}=0$, with maximum bias current \SI{200}{nA}, maximum offset current magnitude \SI{50}{nA}, and maximum offset voltage magnitude \SI{4}{mV}.
+
+\subsection{D2}
+For AC-coupled amplifier in Fig. P2.59: explain why it is a poor AC-coupling approach (hint: bias current). Show one added component (with value) to remove bias-current effect on output.
+
+\subsection{D3}
+Given $R_1=\SI{10}{k\Omega}$ and $R_2=\SI{100}{k\Omega}$ with desired $|V_{o,DC}|\le\SI{100}{mV}$ for zero source DC input:
+\begin{enumerate}[label=\alph*)]
+\item max allowable op-amp offset voltage,
+\item max allowable bias current,
+\item add resistor to cancel bias-current effects,
+\item with that resistor and ignoring $V_{OS}$, max allowable offset current.
+\end{enumerate}
+
+\subsection{D4}
+Non-inverting amplifier with \(\mu\)A741C at \SI{25}{\celsius}, \SIrange{-15}{15}{V}, $R_1=\SI{10}{k\Omega}$ and $R_2=\SI{470}{k\Omega}$. Ignore source resistance and finite gain/bandwidth, but include offset and bias errors. Compute maximum output error.
+
+\subsection{D5}
+Inverting amplifier with \(\mu\)A741C, same environment and values $R_1=\SI{10}{k\Omega}$, $R_2=\SI{470}{k\Omega}$.
+\begin{enumerate}
+\item Max output error from offset and bias.
+\item Explain why adding resistor $R_3$ at non-inverting input helps.
+\item Choose $R_3$ for minimum output error.
+\item Find new maximum output error.
+\end{enumerate}
+
+\subsection{D6}
+Inverting amplifier with $R_1=\SI{10}{k\Omega}$, $R_2=\SI{20}{k\Omega}$, $R_L=\SI{10}{k\Omega}$ and non-ideal open-loop:
+$A_{0,OL}=\SI{100}{dB}$, $f_{BOL}=\SI{10}{Hz}$.
+Tasks: find $\alpha$, $\beta$, $\alpha/\beta$; write $20\log|A_{CL}|$; estimate $K_f$ for large/small loop gain; sketch Bode magnitude for requested terms.
+
+\section{Hints}
+\begin{itemize}
+\item Worst case means signs of errors are chosen to maximize output magnitude.
+\item Output error from input offset voltage scales with noise gain $1+R_2/R_1$ (non-inverting style) or equivalent closed-loop factor.
+\item Bias-current error is found by multiplying bias currents with Thevenin resistances seen at op-amp input terminals.
+\item To cancel average bias-current effect, make resistance seen by $v_+$ equal to resistance seen by $v_-$.
+\item For D6, use $A_{CL}=\dfrac{\alpha A_{OL}}{1+\beta A_{OL}}=\dfrac{\alpha}{\beta}K_f$.
+\end{itemize}
+
+\section{Step-by-step solutions}
+\subsection{D1}
+\begin{enumerate}
+\item Compute output contribution from $V_{OS}$ with noise gain.
+\item Compute output contribution from average bias current and from offset current through feedback/input resistive network.
+\item Use arithmetic worst-case summation of absolute values (not RSS): choose error signs so contributions add in output magnitude.
+\end{enumerate}
+
+\subsection{D2}
+\begin{enumerate}
+\item In poor AC-coupled design, input capacitor blocks source DC but bias current has no proper DC return path, forcing node drift/saturation.
+\item Add a resistor from op-amp input node to ground (or bias reference) so input bias current has a defined path.
+\item Choose this resistor to match equivalent resistance at opposite input to reduce output offset.
+\end{enumerate}
+
+\subsection{D3}
+Given gain magnitude $R_2/R_1=10$ and noise gain $1+R_2/R_1=11$:
+\begin{enumerate}[label=\alph*)]
+\item $|V_{o,OS}|=(1+R_2/R_1)|V_{OS}|\le\SI{0.1}{V}$
+\[
+|V_{OS}|_{max}=0.1/11=\SI{9.09}{mV}.
+\]
+\item Ignoring other errors, $|V_{o,IB}|\approx I_B R_2\le\SI{0.1}{V}$ gives
+\[
+I_{B,max}=0.1/100\,\text{k}\Omega=\SI{1}{\micro A}.
+\]
+\item Add resistor at non-inverting input:
+\[
+R_3=R_1\parallel R_2=\frac{10k\cdot100k}{110k}=\SI{9.09}{k\Omega}.
+\]
+\item Then only offset current remains:
+\[
+|V_{o,IOS}|\approx I_{OS}R_2\le\SI{0.1}{V}\Rightarrow I_{OS,max}=\SI{1}{\micro A}.
+\]
+\end{enumerate}
+
+\subsection{D4}
+For non-inverting gain:
+\[
+A_{CL}=1+\frac{R_2}{R_1}=1+\frac{470k}{10k}=48.
+\]
+Worst-case output offset from \(\mu\)A741C imperfections:
+\[
+|V_{o,max}|\approx A_{CL}|V_{OS,max}| + R_{eq,out}\cdot |I_{error,max}|,
+\]
+where $R_{eq,out}$ term comes from bias-current induced differential input voltage through input network. Insert datasheet worst-case values at \SI{25}{\celsius}.
+
+\subsection{D5}
+\begin{enumerate}
+\item Without $R_3$, compute output offset from $V_{OS}$ plus bias/offset-current drop through effective input resistances.
+\item Idea: make equal DC resistance seen by both op-amp inputs so equal bias currents produce nearly equal drops and cancel at differential input.
+\item Optimal resistor:
+\[
+R_3=R_1\parallel R_2=\frac{10k\cdot470k}{480k}=\SI{9.79}{k\Omega}.
+\]
+\item Recompute with only mismatch current ($I_{OS}$) and $V_{OS}$ terms dominating. Total worst-case is significantly reduced.
+\end{enumerate}
+
+\subsection{D6}
+\begin{enumerate}
+\item Determine ideal closed-loop gain: $\alpha/\beta\approx -R_2/R_1=-2$ for inverting connection.
+\item Feedback factor magnitude for inverting network (source grounded):
+\[
+\beta=\frac{R_1}{R_1+R_2}=\frac{1}{3}.
+\]
+\item Write
+\[
+20\log|A_{CL}|=20\log\left|\frac{\alpha}{\beta}\right|+20\log|K_f|.
+\]
+\item For $\beta A_{OL}\gg1$, $K_f\approx1$ (0 dB). For $\beta A_{OL}\ll1$, $K_f\approx\beta A_{OL}$.
+\item Sketch in order: $A_{OL}$, $\alpha$, $1/\beta$, $\alpha/\beta$, $\beta A_{OL}$, $K_f$, $A_{CL}$.
+\end{enumerate}
+
+\end{document}

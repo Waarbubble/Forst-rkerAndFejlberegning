@@ -1,0 +1,122 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\geometry{margin=2.2cm}
+\sisetup{per-mode=symbol}
+
+\title{Lecture 1 -- Amplifier Basics and dB Calculations}
+\author{Readable Assignment Set}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Assignments}
+\subsection{A1}
+A certain amplifier has an input voltage of \SI{100}{mV} RMS and an input resistance of \SI{100}{\kilo\ohm}. It produces an output of \SI{10}{V} RMS across an \SI{8}{\ohm} load. The power supply has a voltage of \SI{15}{V} and delivers an average current of \SI{2}{A}. Find the power dissipated in the amplifier and the efficiency.
+
+\subsection{A2}
+An amplifier has input voltage \SI{10}{mV} RMS and output voltage \SI{5}{V} RMS across a \SI{10}{\ohm} load. Input current is \SI{1}{\micro A} RMS. Assume purely resistive input/output impedances. Find input resistance, voltage gain, current gain, and power gain (both ratios and dB).
+
+\subsection{A3}
+An amplifier with load \SI{8}{\ohm} has voltage gain unity and input resistance \SI{100}{\kilo\ohm}. Determine current gain and power gain in dB.
+
+\subsection{A4}
+An amplifier has voltage gain \SI{30}{dB} and current gain \SI{70}{dB}. What is the power gain in dB? If input resistance is \SI{100}{\kilo\ohm}, what is the load resistance?
+
+\subsection{A5}
+Find voltages across a \SI{50}{\ohm} resistor corresponding to:
+\begin{enumerate}[label=\alph*)]
+\item \SI{10}{dBV}
+\item \SI{-30}{dBV}
+\item \SI{10}{dBmV}
+\item \SI{20}{dBW}
+\end{enumerate}
+
+\subsection{A6}
+Find power levels in watts corresponding to:
+\begin{enumerate}[label=\alph*)]
+\item \SI{20}{dBm}
+\item \SI{-60}{dBW}
+\item \SI{10}{dBW}
+\end{enumerate}
+
+\section{Hints}
+\subsection{A1--A4}
+\begin{itemize}
+\item Start from RMS power relations: $P=V^2/R$ and $P=I^2R$.
+\item Efficiency is $\eta=\dfrac{P_{out}}{P_{supply}}$.
+\item Convert gain between ratio and dB with $G_{dB}=20\log_{10}(G_V)$, $20\log_{10}(G_I)$, and $10\log_{10}(G_P)$.
+\item For resistive stages: $G_P=G_V\cdot G_I$.
+\end{itemize}
+
+\subsection{A5--A6}
+\begin{itemize}
+\item For dBV: $V=10^{(dBV/20)}\,\si{V}$.
+\item For dBmV: $V=10^{(dBmV/20)}\,\si{mV}$.
+\item For dBW: $P=10^{(dBW/10)}\,\si{W}$.
+\item For dBm: $P=10^{(dBm/10)}\,\si{mW}$.
+\end{itemize}
+
+\section{Step-by-step solutions}
+\subsection{A1}
+\begin{enumerate}
+\item Input power: $P_{in}=V_{in}^2/R_{in}=(0.1)^2/100000=\SI{1e-7}{W}$.
+\item Output power: $P_{out}=V_{out}^2/R_L=10^2/8=\SI{12.5}{W}$.
+\item Supply power: $P_{s}=V_s I_s=15\cdot2=\SI{30}{W}$.
+\item Amplifier dissipation: $P_{diss}=P_s-P_{out}=30-12.5=\SI{17.5}{W}$.
+\item Efficiency: $\eta=P_{out}/P_s=12.5/30=0.4167\approx\SI{41.7}{\percent}$.
+\end{enumerate}
+
+\subsection{A2}
+\begin{enumerate}
+\item Input resistance: $R_{in}=V_{in}/I_{in}=10\,\text{mV}/1\,\mu\text{A}=\SI{10}{\kilo\ohm}$.
+\item Voltage gain ratio: $A_V=V_o/V_i=5/0.01=500$, so $A_V\text{(dB)}=20\log_{10}(500)=\SI{53.98}{dB}$.
+\item Output current: $I_o=V_o/R_L=5/10=\SI{0.5}{A}$.
+\item Current gain ratio: $A_I=I_o/I_i=0.5/10^{-6}=5\times10^5$, so $A_I\text{(dB)}\approx\SI{113.98}{dB}$.
+\item Power gain ratio: $A_P=A_VA_I=2.5\times10^8$, so $A_P\text{(dB)}=10\log_{10}(2.5\times10^8)=\SI{83.98}{dB}$.
+\end{enumerate}
+
+\subsection{A3}
+\begin{enumerate}
+\item With unity voltage gain, $V_o=V_i$.
+\item $I_i=V_i/R_{in}$ and $I_o=V_o/R_L=V_i/8$.
+\item Current gain $A_I=I_o/I_i=(V_i/8)/(V_i/100000)=12500$.
+\item $A_I\text{(dB)}=20\log_{10}(12500)=\SI{81.94}{dB}$.
+\item Power gain ratio $A_P=A_VA_I=1\cdot12500=12500$.
+\item $A_P\text{(dB)}=10\log_{10}(12500)=\SI{40.97}{dB}$.
+\end{enumerate}
+
+\subsection{A4}
+\begin{enumerate}
+\item Convert gains to ratios: $A_V=10^{30/20}=31.62$, $A_I=10^{70/20}=3162.3$.
+\item Power gain ratio: $A_P=A_VA_I\approx100000$.
+\item Therefore $A_P\text{(dB)}=10\log_{10}(100000)=\SI{50}{dB}$.
+\item Since $A_V=(R_L/R_{in})A_I$, solve for $R_L$: 
+$R_L=R_{in}(A_V/A_I)=100\,\text{k}\Omega\cdot(31.62/3162.3)=\SI{1}{\kilo\ohm}$.
+\end{enumerate}
+
+\subsection{A5}
+Across $R=\SI{50}{\ohm}$:
+\begin{enumerate}[label=\alph*)]
+\item $V=10^{10/20}=\SI{3.162}{V}$.
+\item $V=10^{-30/20}=\SI{31.6}{mV}$.
+\item $V=10^{10/20}\,\text{mV}=\SI{3.162}{mV}$.
+\item First $P=10^{20/10}=\SI{100}{W}$, then $V=\sqrt{PR}=\sqrt{100\cdot50}=\SI{70.7}{V}$.
+\end{enumerate}
+
+\subsection{A6}
+\begin{enumerate}[label=\alph*)]
+\item $P=10^{20/10}\,\text{mW}=100\,\text{mW}=\SI{0.1}{W}$.
+\item $P=10^{-60/10}\,\text{W}=10^{-6}\,\text{W}=\SI{1}{\micro W}$.
+\item $P=10^{10/10}\,\text{W}=\SI{10}{W}$.
+\end{enumerate}
+
+\end{document}

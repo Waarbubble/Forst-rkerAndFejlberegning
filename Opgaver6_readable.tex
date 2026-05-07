@@ -1,0 +1,119 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\geometry{margin=2.2cm}
+
+\title{Lecture 6 -- Differential and Instrumentation Amplifiers}
+\author{Readable Assignment Set}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Assignments}
+\subsection{F1}
+A differential amplifier is built using AD620A on \(\pm\SI{15}{V}\) supplies with \SI{5}{\percent} tolerance.
+\begin{enumerate}
+\item Determine $R_G$ for gain 100.
+\item For differential input $v_d=\SI{0.14}{V}$, find max allowable common-mode input if CMRR-induced error must not exceed 100 ppm.
+\item Find worst-case output error caused by supply-voltage variation.
+\end{enumerate}
+
+\subsection{F2}
+For two-op-amp differential stage with $R_1=\SI{1}{k\Omega}$, $R_2=\SI{10}{k\Omega}$, $R_3=\SI{1}{k\Omega}$:
+\begin{enumerate}
+\item Derive and compute differential gain $A_d=e_{o2}/(e_2-e_1)$ with ideal A1 and A2.
+\item Now include op-amp data: differential input resistance $R_d=\SI{1}{M\Omega}$, $A_0=80\,\text{dB}$; all else ideal. Determine DC input impedance seen from each input terminal (symbolic and numeric).
+\end{enumerate}
+
+\subsection{F3}
+Three-op-amp instrumentation amplifier with $R_{g1}=R_{g2}=\SI{600}{\Omega}$, $R_1=\SI{1}{k\Omega}$, $R_2=\SI{68}{k\Omega}$, $R_3=R_4=\SI{1}{k\Omega}$:
+\begin{enumerate}
+\item With ideal A1--A3, compute 
+\[
+A_v=\frac{e_o}{v_{g1}-v_{g2}}.
+\]
+\item With non-ideal data
+\begin{itemize}
+\item A1: $V_{OS1}=\pm\SI{0.5}{mV}$, $I_{B1}=\SI{10}{nA}$, $I_{OS1}=\pm\SI{0.1}{nA}$
+\item A2: $V_{OS2}=\pm\SI{0.5}{mV}$, $I_{B2}=\SI{10}{nA}$, $I_{OS2}=\pm\SI{0.1}{nA}$
+\item A3: $V_{OS3}=\pm\SI{1.0}{mV}$, $I_{B3}=\SI{500}{nA}$, $I_{OS3}=\pm\SI{5}{nA}$
+\end{itemize}
+find minimum differential input $v_d=v_{g1}-v_{g2}$ such that offset and bias errors are at most 5\%.
+\end{enumerate}
+
+\section{Hints}
+\begin{itemize}
+\item AD620 gain law: $G=1+\dfrac{49.4\,\text{k}\Omega}{R_G}$.
+\item CMRR relation: $\text{CMRR}=A_d/A_{cm}$ and output error from common mode is $A_{cm}v_{cm}$.
+\item For 100 ppm requirement, set error ratio to $10^{-4}$ and solve for $v_{cm}$.
+\item In instrumentation amplifiers, first stage gives high differential gain with high input impedance; second stage performs subtraction.
+\end{itemize}
+
+\section{Step-by-step solutions}
+\subsection{F1}
+\begin{enumerate}
+\item For $G=100$:
+\[
+100=1+\frac{49.4\,k\Omega}{R_G}
+\Rightarrow
+R_G=\frac{49.4\,k\Omega}{99}=\SI{499}{\Omega}\ (\approx\SI{499}{\Omega}).
+\]
+\item Output due to differential signal: $v_{o,d}=Gv_d=100\cdot0.14=\SI{14}{V}$.
+Allowable CMRR-related error: $v_{o,err,max}=10^{-4}v_{o,d}=\SI{1.4}{mV}$.
+If AD620 CMRR (from datasheet at this gain) is used, compute 
+\[
+A_{cm}=\frac{A_d}{10^{\text{CMRR}/20}},\quad v_{cm,max}=\frac{v_{o,err,max}}{A_{cm}}.
+\]
+\item For supply variation \(\pm5\%\), use datasheet PSRR:
+\[
+|v_{o,ps}|_{max}\approx \left(\frac{\Delta V_S}{\text{PSRR (V/V equivalent)}}\right)\times G_{path}
+\]
+and evaluate worst-case from both rails combined.
+\end{enumerate}
+
+\subsection{F2}
+\begin{enumerate}
+\item Ideal differential gain for matched differential amplifier form:
+\[
+A_d=\frac{R_2}{R_1}=10.
+\]
+\item With finite $A_0$ and finite $R_d$, each input impedance is reduced from ideal infinity to a finite value set by local feedback and the effective loading of op-amp input differential resistance.
+General method:
+\begin{itemize}
+\item write KCL at each input node,
+\item include op-amp relation $v_o=A_0(v^+-v^-)$,
+\item include current through $R_d$ between op-amp inputs,
+\item solve for $Z_{in}=v_{in}/i_{in}$.
+\end{itemize}
+For $A_0=\num{10000}$ and $R_d=\SI{1}{M\Omega}$, resulting $Z_{in}$ is high but finite (evaluate numerically from derived expression).
+\end{enumerate}
+
+\subsection{F3}
+\begin{enumerate}
+\item Instrumentation-amplifier gain can be written as first-stage gain times difference-stage gain:
+\[
+A_v=\left(1+\frac{2R_2}{R_g}\right)\left(\frac{R_4}{R_3}\right),
+\]
+with $R_g=R_{g1}=R_{g2}=\SI{600}{\Omega}$ and $R_4/R_3=1$:
+\[
+A_v=1+\frac{2\cdot68k}{600}=1+226.67\approx227.67.
+\]
+\item Find worst-case output-referred error from all $V_{OS}$, $I_B$, and $I_{OS}$ sources, each multiplied by its closed-loop gain/resistance factor. Sum magnitudes for worst-case.
+\item Require
+\[
+\frac{|v_{o,error,max}|}{|A_v v_d|}\le0.05
+\Rightarrow
+|v_d|_{min}=\frac{|v_{o,error,max}|}{0.05|A_v|}.
+\]
+\item Insert given non-ideal data to compute numerical $v_{d,min}$.
+\end{enumerate}
+
+\end{document}
