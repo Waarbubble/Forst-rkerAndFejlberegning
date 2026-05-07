@@ -1,0 +1,153 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tikz}
+\geometry{margin=2.2cm}
+
+\title{Lecture 3 -- Frequency Response and Bandwidth}
+\author{Readable Assignment Set}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Assignments}
+\subsection{C1}
+Op-amp with unity-gain bandwidth \SI{15}{MHz}. Used as non-inverting amplifier with DC gain 10 and then 100. Find 3-dB bandwidth in both cases.
+
+\subsection{C2}
+Dominant-pole op-amp with $A_{0,OL}=50{,}000$ and $f_{BOL}=\SI{100}{Hz}$. Sketch magnitude Bode plot of $A_{OL}$ to scale.
+
+\subsection{C3}
+Op-amp with $A_{0,OL}=200{,}000$ and 3-dB bandwidth \SI{5}{Hz}. Find magnitude and phase of open-loop gain at \SI{100}{Hz}, \SI{1000}{Hz}, and \SI{1}{MHz}.
+
+\subsection{C4}
+Design gain 100 using either (1) one non-inverting stage of gain 100 or (2) two cascaded stages of gain 10. Op-amp GBP is $10^6$. Write gain vs frequency and find 3-dB bandwidth for each option.
+
+\subsection{C5}
+Dominant-pole op-amp with DC gain 200,000 and 3-dB bandwidth \SI{5}{Hz}. Sketch to scale the Bode magnitude of open-loop gain. Then sketch closed-loop magnitude for non-inverting gains 100 and 10.
+
+\subsection{C6}
+Inverting amplifier with $R_2=\SI{100}{k\Omega}$, $R_1=\SI{10}{k\Omega}$, input 
+\[
+v_{in}=0.1\sin(2\pi\cdot 5\cdot10^3 t)\,\si{V},
+\]
+with open-loop model
+\[
+A_{OL}(f)=\frac{A_0}{1+jf/f_c},\quad A_0=100\,\text{dB},\ f_c=\SI{10}{Hz}.
+\]
+1) Find output amplitude assuming ideal op-amp.
+2) Find percentage error from finite open-loop behavior.
+
+\subsection{C7}
+Non-inverting amplifier with $R_2=\SI{99}{k\Omega}$, $R_1=\SI{1}{k\Omega}$ and same open-loop model as C6.
+\begin{enumerate}
+\item Sketch Bode magnitude of $A_{OL}$, $1/\beta$, and $A_V$ from \SI{1}{Hz} to \SI{10}{MHz}.
+\item Find 3-dB bandwidth $f_1'$.
+\item Derive symbolic expression for $f_1'$ as function of $\beta$ and open-loop parameters.
+\end{enumerate}
+
+\section{Hints}
+\begin{itemize}
+\item For dominant-pole op-amp: $A_{OL}(j f)=\dfrac{A_0}{1+j f/f_c}$.
+\item GBP relation: $f_t\approx A_{CL}(0)\,f_{BCL}$.
+\item Closed-loop transfer for feedback amplifiers: 
+$A_{CL}=\dfrac{A_{ideal}}{1+\dfrac{1}{\beta A_{OL}}}$.
+\item For phase of a first-order pole: $\angle A_{OL}=-\arctan(f/f_c)$.
+\end{itemize}
+
+\section{Step-by-step solutions}
+\subsection{C1}
+\[
+f_{3dB}\approx \frac{f_t}{A_{CL}(0)}.
+\]
+For gain 10: $f_{3dB}=15\,\text{MHz}/10=\SI{1.5}{MHz}$.
+For gain 100: $f_{3dB}=15\,\text{MHz}/100=\SI{150}{kHz}$.
+
+\subsection{C2}
+\begin{enumerate}
+\item $20\log_{10}(A_0)=20\log_{10}(50000)=\SI{93.98}{dB}$.
+\item Break at $f_c=\SI{100}{Hz}$.
+\item Slope above break: \SI{-20}{dB/dec}.
+\item Unity crossing near $f_t=A_0f_c=\SI{5}{MHz}$.
+\end{enumerate}
+
+\subsection{C3}
+Given $A_0=200000$ and $f_c=\SI{5}{Hz}$:
+\[
+|A_{OL}|=\frac{A_0}{\sqrt{1+(f/f_c)^2}},\quad \angle A_{OL}=-\arctan(f/f_c).
+\]
+\begin{itemize}
+\item $f=\SI{100}{Hz}$: $f/f_c=20$, $|A|\approx 9990$ (\SI{79.99}{dB}), phase $\approx-87.1^\circ$.
+\item $f=\SI{1000}{Hz}$: $f/f_c=200$, $|A|\approx1000$ (\SI{60.00}{dB}), phase $\approx-89.7^\circ$.
+\item $f=\SI{1}{MHz}$: $f/f_c=200000$, $|A|\approx1$ (\SI{0}{dB}), phase $\approx-90^\circ$.
+\end{itemize}
+
+\subsection{C4}
+\textbf{Alternative 1: one stage, gain 100}
+\[
+A_1(jf)=\frac{100}{1+jf/f_{B1}},\quad f_{B1}=\frac{10^6}{100}=\SI{10}{kHz}.
+\]
+
+\textbf{Alternative 2: two stages, each gain 10}
+\[
+A_2(jf)=\left(\frac{10}{1+jf/f_{B2}}\right)^2,\quad f_{B2}=\frac{10^6}{10}=\SI{100}{kHz}.
+\]
+Overall DC gain is 100. The composite 3-dB point satisfies
+\[
+\left(1+(f/f_{B2})^2\right)^2=2 \Rightarrow f\approx0.6436f_{B2}=\SI{64.4}{kHz}.
+\]
+So cascaded design gives much larger bandwidth than single-stage \SI{10}{kHz}.
+
+\subsection{C5}
+Open-loop: same as C3, with DC \SI{106}{dB} and break \SI{5}{Hz}, slope \SI{-20}{dB/dec}.
+Closed-loop gain 100: flat at \SI{40}{dB} until about \SI{10}{kHz}.
+Closed-loop gain 10: flat at \SI{20}{dB} until about \SI{100}{kHz}.
+
+\subsection{C6}
+\begin{enumerate}
+\item Ideal inverting gain magnitude $|A|=R_2/R_1=10$.
+Input amplitude is \SI{0.1}{V} so output amplitude is \SI{1.0}{V}.
+\item At \SI{5}{kHz}: 
+\[
+|A_{OL}|\approx \frac{10^{100/20}}{\sqrt{1+(5000/10)^2}}\approx\frac{100000}{500}\approx200.
+\]
+Feedback factor for inverting stage with grounded source: 
+$\beta=\frac{R_1}{R_1+R_2}=\frac{1}{11}$.
+Loop gain $\beta|A_{OL}|\approx18.18$.
+Relative gain error estimate $\approx\frac{1}{1+\beta|A_{OL}|}\approx\SI{5.2}{\percent}$.
+\end{enumerate}
+
+\subsection{C7}
+\begin{enumerate}
+\item $\beta=\frac{R_1}{R_1+R_2}=\frac{1}{100}$, so $1/\beta=100$ (\SI{40}{dB}).
+\item With $f_t=A_0f_c=100000\cdot10=\SI{1}{MHz}$ and non-inverting gain 100, 
+\[
+f_1'\approx\frac{f_t}{100}=\SI{10}{kHz}.
+\]
+\item Symbolic expression using single-pole model:
+\[
+f_1'\approx\beta A_0 f_c = \beta f_t,
+\]
+valid when $A_0\gg1$ and single dominant pole approximation is valid.
+\end{enumerate}
+
+\subsection{Illustrative Bode sketch}
+\begin{center}
+\begin{tikzpicture}[xscale=1.1,yscale=0.09]
+\draw[->] (0,0) -- (10,0) node[right] {$\log f$};
+\draw[->] (0,0) -- (0,115) node[above] {dB};
+\draw[thick] (0,94) -- (3,94) -- (9, -26);
+\draw[dashed] (3,0) -- (3,94) node[above] {$f_c$};
+\draw[dashed] (7.7,0) -- (7.7,10) node[above] {$f_t$};
+\end{tikzpicture}
+\end{center}
+
+\end{document}
