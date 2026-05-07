@@ -26,7 +26,7 @@ Op-amp with unity-gain bandwidth \SI{15}{MHz}. Used as non-inverting amplifier w
 Dominant-pole op-amp with $A_{0,OL}=\num{50000}$ and $f_{BOL}=\SI{100}{Hz}$. Sketch magnitude Bode plot of $A_{OL}$ to scale.
 
 \subsection{C3}
-Op-amp with $A_{0,OL}=200{,}000$ and 3-dB bandwidth \SI{5}{Hz}. Find magnitude and phase of open-loop gain at \SI{100}{Hz}, \SI{1000}{Hz}, and \SI{1}{MHz}.
+Op-amp with $A_{0,OL}=\num{200000}$ and 3-dB bandwidth \SI{5}{Hz}. Find magnitude and phase of open-loop gain at \SI{100}{Hz}, \SI{1000}{Hz}, and \SI{1}{MHz}.
 
 \subsection{C4}
 Design gain 100 using either (1) one non-inverting stage of gain 100 or (2) two cascaded stages of gain 10. Op-amp GBP is $10^6$. Write gain vs frequency and find 3-dB bandwidth for each option.
@@ -85,9 +85,9 @@ Given $A_0=200000$ and $f_c=\SI{5}{Hz}$:
 |A_{OL}|=\frac{A_0}{\sqrt{1+(f/f_c)^2}},\quad \angle A_{OL}=-\arctan(f/f_c).
 \]
 \begin{itemize}
-\item $f=\SI{100}{Hz}$: $f/f_c=20$, $|A|\approx 9990$ (\SI{79.99}{dB}), phase $\approx-87.1^\circ$.
-\item $f=\SI{1000}{Hz}$: $f/f_c=200$, $|A|\approx1000$ (\SI{60.00}{dB}), phase $\approx-89.7^\circ$.
-\item $f=\SI{1}{MHz}$: $f/f_c=200000$, $|A|\approx1$ (\SI{0}{dB}), phase $\approx-90^\circ$.
+\item $f=\SI{100}{Hz}$: $f/f_c=20$, $|A|\approx 9990$ (\SI{79.99}{dB}), phase $\approx \SI{-87.1}{\degree}$.
+\item $f=\SI{1000}{Hz}$: $f/f_c=200$, $|A|\approx1000$ (\SI{60.00}{dB}), phase $\approx \SI{-89.7}{\degree}$.
+\item $f=\SI{1}{MHz}$: $f/f_c=200000$, $|A|\approx1$ (\SI{0}{dB}), phase $\approx \SI{-90}{\degree}$.
 \end{itemize}
 
 \subsection{C4}
@@ -102,7 +102,8 @@ A_2(jf)=\left(\frac{10}{1+jf/f_{B2}}\right)^2,\quad f_{B2}=\frac{10^6}{10}=\SI{1
 \]
 Overall DC gain is 100. The composite 3-dB point satisfies
 \[
-\left(1+(f/f_{B2})^2\right)^2=2 \Rightarrow f\approx0.6436f_{B2}=\SI{64.4}{kHz}.
+\left(1+(f/f_{B2})^2\right)^2=2 \Rightarrow \frac{f}{f_{B2}}=\sqrt{\sqrt{2}-1}\approx0.6436
+\Rightarrow f\approx0.6436f_{B2}=\SI{64.4}{kHz}.
 \]
 So cascaded design gives much larger bandwidth than single-stage \SI{10}{kHz}.
 

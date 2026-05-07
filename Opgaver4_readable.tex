@@ -34,7 +34,7 @@ Given $R_1=\SI{10}{k\Omega}$ and $R_2=\SI{100}{k\Omega}$ with desired $|V_{o,DC}
 \end{enumerate}
 
 \subsection{D4}
-Non-inverting amplifier with \(\mu\)A741C at \SI{25}{\celsius}, $\pm$\SI{15}{V}, $R_1=\SI{10}{k\Omega}$ and $R_2=\SI{470}{k\Omega}$. Ignore source resistance and finite gain/bandwidth, but include offset and bias errors. Compute maximum output error.
+Non-inverting amplifier with \(\mu\)A741C at \SI{25}{\celsius}, \SIrange{-15}{15}{V}, $R_1=\SI{10}{k\Omega}$ and $R_2=\SI{470}{k\Omega}$. Ignore source resistance and finite gain/bandwidth, but include offset and bias errors. Compute maximum output error.
 
 \subsection{D5}
 Inverting amplifier with \(\mu\)A741C, same environment and values $R_1=\SI{10}{k\Omega}$, $R_2=\SI{470}{k\Omega}$.
@@ -47,7 +47,7 @@ Inverting amplifier with \(\mu\)A741C, same environment and values $R_1=\SI{10}{
 
 \subsection{D6}
 Inverting amplifier with $R_1=\SI{10}{k\Omega}$, $R_2=\SI{20}{k\Omega}$, $R_L=\SI{10}{k\Omega}$ and non-ideal open-loop:
-$A_{0,OL}=100\,\text{dB}$, $f_{BOL}=\SI{10}{Hz}$.
+$A_{0,OL}=\SI{100}{dB}$, $f_{BOL}=\SI{10}{Hz}$.
 Tasks: find $\alpha$, $\beta$, $\alpha/\beta$; write $20\log|A_{CL}|$; estimate $K_f$ for large/small loop gain; sketch Bode magnitude for requested terms.
 
 \section{Hints}
@@ -64,7 +64,7 @@ Tasks: find $\alpha$, $\beta$, $\alpha/\beta$; write $20\log|A_{CL}|$; estimate 
 \begin{enumerate}
 \item Compute output contribution from $V_{OS}$ with noise gain.
 \item Compute output contribution from average bias current and from offset current through feedback/input resistive network.
-\item Sum magnitudes in worst-case sign combination.
+\item Use arithmetic worst-case summation of absolute values (not RSS): choose error signs so contributions add in output magnitude.
 \end{enumerate}
 
 \subsection{D2}
